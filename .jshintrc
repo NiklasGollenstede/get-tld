@@ -1,0 +1,44 @@
+{
+	"indent": 1, // indent with tabs
+	"-W002": false, // Value of '{cought exception}' may be overwritten in IE 8 and earlier.
+	"-W006": false, // Confusing minuses.
+	"-W022": false, // Do not assign to the exception parameter. Note: only relevant in IE <= 8
+	"-W030": false, // Expected an assignment or function call and instead saw an expression.
+	"-W034": false, // Unnecessary directive "use strict".
+	"-W054": false, // The Function constructor is a form of eval.
+	"-W058": false, // Missing '()' invoking a constructor.
+	"-W078": false, // Setter is defined without getter.
+	"-W082": false, // Function declarations should not be placed in blocks. (Not a problem in strict mode)
+
+	"curly": true,
+	"elision": true,
+	"eqeqeq": true,
+	"eqnull": true,
+	"laxbreak": true,
+	"newcap": false,
+	"noyield": true, // allow generator without yield expression
+	"sub": true, // allow headers['DNT'] instead of headers.DNT
+	"undef": false,
+	"validthis": true,
+	"varstmt": true, // enforce 'let' or 'const' instead of 'var'
+
+	"esversion": 6,
+	"strict": "implied", // 'use strict' is implicit for functions with non-simple parameter lists, but jshint doesn't get that
+	"globalstrict": true,
+	"latedef": "nofunc",
+
+	"browser": true,
+	"node": true,
+	"devel": true, // console, alert, ...
+	"globals": {
+		"describe": false,
+		"xdescribe": false,
+		"it": false,
+		"xit": false,
+		"chaiAsPromised": false,
+		"expect": false,
+		"AssertionError": false,
+		"Assertion": false,
+		"assert": false
+	}
+}

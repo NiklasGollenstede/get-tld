@@ -1,0 +1,22 @@
+{
+	"name": "get-tld",
+	"description": "JavaScript library to precisely get the TLD part of an URL in a browser",
+	"license": "MIT",
+	"dependencies": {
+		"es6lib": "NiklasGollenstede/es6lib",
+		"request-promise": "^3.0.0"
+	},
+	"devDependencies": {
+		"chai": "^3.5.0",
+		"mocha": "^2.5.3"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/NiklasGollenstede/get-tld"
+	},
+	"scripts": {
+		"test": "mocha",
+		"postinstall": "node build.js && npm test -- -R progress"
+	},
+	"version": "0.0.1"
+}
