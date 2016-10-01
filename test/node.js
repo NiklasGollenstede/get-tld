@@ -1,5 +1,7 @@
 'use strict'; // license: MIT
 
+Error.stackTraceLimit = Infinity; // get them all ...
+
 const chai = require('chai');
 chai.should();
 
