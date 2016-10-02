@@ -14,8 +14,8 @@
 		"url": "https://github.com/NiklasGollenstede/get-tld"
 	},
 	"scripts": {
-		"test": "node build.js && mocha --require test/node",
-		"postinstall": "node build.js && npm test -- -R progress"
+		"test": "node build-node.js && mocha --require test/node",
+		"postinstall": "node build-node.js && npm test -- -R progress"
 	},
 	"version": "0.1.0"
 }

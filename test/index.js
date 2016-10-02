@@ -1,4 +1,4 @@
-'use strict'; // license: MIT
+'use strict'; /* globals global, require, */ // license: MIT
 
 global.URL = require('url').parse;
 const nameprep = string => new URL('http://'+ string).hostname;
@@ -99,22 +99,22 @@ describe('The Host class should', function() {
 	});
 
 	it('accept IPv4 addresses', () => {
-		new Host('127.0.0.1').should.have.a.property('ipv4', '127.0.0.1');
-		new Host('127.0.0.1:42').should.contain.all.keys({ ipv4: '127.0.0.1', port: '42', });
+		new Host('127.0.0.1').should.include({ ipv4: '127.0.0.1', });
+		new Host('127.0.0.1:42').should.include({ ipv4: '127.0.0.1', port: '42', });
 		[
 			'255.255.255.255',
 			'25.25.25.25',
 			'0.0.0.0',
 			'199.000.111.001',
 			'025.025.025.025',
-		].forEach(ip => new Host(ip).should.have.a.property('ipv4', ip));
+		].forEach(ip => new Host(ip).should.include({ ipv4: ip, }));
 		[
 			'355.255.255.255',
 			'-1.255.255.255',
 			'256.255.255.255',
 			'a.b.c.d',
 			'ff.ff.ff.ff',
-		].forEach(ip => new Host(ip).should.contain.all.keys({ ipv4: '', name: ip, }));
+		].forEach(noIP => new Host(noIP).should.include({ ipv4: '', name: noIP.split('.').pop(), }));
 	});
 
 });
