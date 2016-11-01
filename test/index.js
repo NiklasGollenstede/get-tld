@@ -28,8 +28,8 @@ describe('"getTLD" should', function() {
 	it('return NULL for invalid TLDs', () => {
 		test('a.b.blob',              null, '');
 		test('b.com.yx',              null, '');
-		test('www.org.cy',            '.org.cy');             // rule: org.cy
-		test('www.cy',                null, '');              // no rule cy
+		test('www.asdfghjkl.jm',      '.asdfghjkl.jm');        // rule: *.jm
+		test('www.jm',                null, '');              // no rule jm
 	});
 
 	it('return NULL for input NULL', () => {
