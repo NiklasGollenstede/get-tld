@@ -1,28 +1,9 @@
 JavaScript library to precisely get the TLD part of an URL in a browser.
 
 ##Features:
-- Precision: uses the same list of predefined TLDs as Mozilla (``https://publicsuffix.org/list/public_suffix_list.dat`` by default)
+- Precision: uses the same list of predefined TLDs as Firefox and Chrome (``https://publicsuffix.org/list/public_suffix_list.dat`` by default)
 - Size: the list of the TLDs is saved as compact as possible. (< 80kB in total, which is smaller than the plain list itself. ~ 30kB zipped)
 - Speed: most of the work is done in the build process on the server, testing urls is fast for the client
-
-##Installation:
-Run ``npm install get-tld --save`` to will download, build and test.
-
-##Update (of the TLD list):
-- either run ``npm install``{.ruby} again
-- or call this in the node.js program:
-```js
-require('get-tld/build-node')({
-    listUrl: 'https://publicsuffix.org/list/public_suffix_list.dat', // URL of the public suffix list to download and use
-    outputPath: 'index.js', // target file name, relative to __dirname of build.js
-    globalName: 'getTLD', // the name of the global variable used if require and define are missing (in the browser). '-lowercase' will be replaced with 'Uppercase'
-    defineName: null, // the name used to define() the module, uses anonymous define (recommended) if falsy.
-}).then(({ file, url, data, }) => {
-     console.log('wrote', data.length, 'chars to', file);
-     delete require.cache[file]; // remove cached old version
-     getTLD = require(file); // load updated module
-});
-```
 
 ##Usage:
 After it's been installed via ``npm install`` the resulting file (``index.js`` by default) can be served as an UMD module or used within node.js:
@@ -55,6 +36,31 @@ new Host('127.0.0.1:80'); // { ipv4: '127.0.0.1', port: '80', ... }
 new Host('::1'); // throws TypeError
 new Host('300.0.0.1'); // { sub: '300.0.0', name: '1', ... } // not an IPv4, no valid public suffix
 new Host('[foobar]'); // { ipv6: 'foobar', ... }
+
+// works with URL, Location and HTMLAnchorElement objects, and other objects that have a string .host property
+new Host(window.location);
+new Host(new URL(href));
+new Host(document.querySelector('a'));
+```
+
+##Installation:
+Run ``npm install get-tld --save`` to will download, build and test.
+
+##Update (of the TLD list):
+- either run ``npm install`` again
+- or call this in the node.js program:
+```js
+require('get-tld/build-node')({
+    listUrl: 'https://publicsuffix.org/list/public_suffix_list.dat', // URL of the public suffix list to download and use
+    outputPath: 'index.js', // target file name, relative to __dirname of build.js
+    globalName: 'getTLD', // the name of the global variable used if require and define are missing (in the browser).
+    defineName: null, // the name used to define() the module, uses anonymous define (recommended) if falsy.
+}).then(({ url, list, file, data, }) => {
+     console.log('read', list.length, 'chars from', url);
+     console.log('wrote', data.length, 'chars to', file);
+     delete require.cache[file]; // remove cached old version
+     getTLD = require(file); // load updated module
+});
 ```
 
 ##API
@@ -79,6 +85,7 @@ const { Host, } = require('get-tld');
  */
 
 host.toString();
+host.host; // getter
 /**
  * Casts the Host back into a string. If the Host object has not been changed, it returns the same string that was passed into the constructor.
  * Prefers `.ipv6` over `.piv4` over `.sub`/`.name`/`.pub`. Appends the port only if it is set.

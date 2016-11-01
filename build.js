@@ -1,4 +1,4 @@
-(function(global) { 'use strict'; const factory = function getTld_build(exports) { // license: MIT
+(function(global) { 'use strict'; const factory = function getTLD_build(exports) { // license: MIT
 
 /**
  * This factory function is pasted into the output file.
@@ -64,17 +64,15 @@ function factory(originalTree) {
 	 */
 	function Host(host, tree) {
 		this.sub = ''; this.host = ''; this.pub = ''; this.ipv6 = ''; this.ipv4 = ''; this.port = '';
-		if (typeof host === 'object') {
+		if (typeof host === 'object' && host !== null) {
 			if (host instanceof Host) { // copy constructor
 				this.port = host.port;
 				if (host.ipv6) {
-					this.ipv6 = host.ipv6;
+					this.ipv6 = host.ipv6; return; // is normalized
 				} else if (host.ipv4) {
-					this.ipv4 = host.ipv4;
-				} else {
-					this.sub = host.sub; this.host = host.host; this.pub = host.pub;
+					this.ipv4 = host.ipv4; return; // is normalized
 				}
-				return;
+				// continue on, because it may need to be normalized
 			}
 			host = host.host;
 		}
@@ -159,7 +157,7 @@ function factory(originalTree) {
 	}
 
 	return Object.freeze(Object.assign(getPublicSuffix, {
-		nameprep: nameprep,
+		nameprep: nameprep, // TODO: remove this or document that it may not be present and that it may not work on strings that contain '.'s
 		getTldTree: getTldTree,
 		defaultTree: defaultTree,
 		Host: Host,
@@ -176,6 +174,7 @@ function build(list, globalName, defineName) {
 
 	const tree = { };
 	tlds.forEach(tld => {
+		if ((/�/.test(tld))) { console.warn('invalid entry', tld); return; }
 		const parts = tld.split('.');
 		add(parts, tree);
 	});
@@ -194,7 +193,7 @@ return (${ factory })(
 	(${ treeToString(tree) })
 ); }`
 		).replace(/([(){};\s])(?:const|let) /g, '$1var '),
-		globalName,
+		globalName || 'getTLD',
 		defineName
 	);
 	return data;

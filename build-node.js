@@ -29,13 +29,13 @@ const loadAndWrite = module.exports = async(function*({
 	// const min = UglifyJS.minify(data, { fromString: true, });
 	// (yield FS.writeFile(file.replace(/\.js$/, '.min.js'), min.code, 'utf8'));
 
-	return { file, url: listUrl, data, };
+	return { file, url: listUrl, data, list, };
 });
 loadAndWrite.build = build;
 
 
 // run if require()ed directly by node.js
-if (process.argv[1] === __filename) {
-	loadAndWrite()
-	.catch(error => { console.error(error); process.exit(-1); });
+if (require.main === module) {
+	module.exports = loadAndWrite()
+	.catch(error => { console.error(error); process.exitCode = 1; throw error; });
 }
